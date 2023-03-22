@@ -6,14 +6,34 @@ import (
 	"dummy"
 	"os"
 	"errors"
+	"flag"
 )
 
 func main() {	
+	// 10.2.7.24:9000
+	// :9000
+	// 192.168.4.91:9000
+	serverIP := flag.String("a", ":9000", "server IP")
+	var mode int
+	flag.IntVar(&mode, "m", 0, "0 - dummy (default)")
+	flag.Parse()
+
+	fmt.Printf("Server IP: %s\n", *serverIP)
+	var h func(w http.ResponseWriter, r *http.Request)
+
+	switch mode {
+		case 0:
+			fmt.Printf("Server mode: dummy\n")
+			h = dummy.DummyServe
+
+		break
+	}
+
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", dummy.DummyServe)
+	mux.HandleFunc("/", h)
 
-	err := http.ListenAndServe(":3333", mux)
+	err := http.ListenAndServe(*serverIP, mux)
   if errors.Is(err, http.ErrServerClosed) {
 		fmt.Printf("server closed\n")
 	} else if err != nil {
