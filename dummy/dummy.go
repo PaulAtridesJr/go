@@ -37,7 +37,7 @@ func profileAvailable(w http.ResponseWriter, r *http.Request) {
 
 func startBioSession(w http.ResponseWriter, r *http.Request) {
 	sid := uuid.New().String() + "_bio_sid"
-	sidTTL := strconv.FormatInt(time.Now().UTC().Unix()*1000, 10)
+	sidTTL := strconv.FormatInt(time.Now().Add(time.Hour * 10).UTC().Unix()*1000, 10)
 	io.WriteString(w, "{\"sid\":\""+sid+"\",\"sidTTL\":"+sidTTL+",\"redirectURL\":\"\"}")
 }
 
