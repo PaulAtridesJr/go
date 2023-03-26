@@ -7,6 +7,7 @@ import (
 	"os"
 	"errors"
 	"flag"
+	"advanced"
 )
 
 func main() {	
@@ -15,7 +16,7 @@ func main() {
 	// 192.168.4.91:9000
 	serverIP := flag.String("a", ":9000", "server IP")
 	var mode int
-	flag.IntVar(&mode, "m", 0, "0 - dummy (default)")
+	flag.IntVar(&mode, "m", 0, "0 - dummy (default), 1 - full")
 	flag.Parse()
 
 	fmt.Printf("Server IP: %s\n", *serverIP)
@@ -25,7 +26,9 @@ func main() {
 		case 0:
 			fmt.Printf("Server mode: dummy\n")
 			h = dummy.DummyServe
-
+		case 1:
+			fmt.Printf("Server mode: full\n")
+			h = advanced.AdvancedServe(true)
 		break
 	}
 
